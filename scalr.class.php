@@ -32,8 +32,17 @@ class ScalrClient
     'ServerTerminate',
     'StatisticsGetGraphURL');
 
-    function __construct($api_key, $secret_key, $url='https://api.scalr.net/', $version='2.3.0')
+    private $api_key = '';
+    private $secret_key = '';
+    private $url = '';
+    private $api_version = '';
+
+    function __construct($api_key, $secret_key, $url='https://api.scalr.net/', $api_version='2.3.0')
     {
+        $this->api_key = $api_key;
+        $this->secret_key = $secret_key;
+        $this->url = $url;
+        $this->api_version = $api_version;
     }
 
     function __call($name, $arguments=null)
@@ -49,8 +58,8 @@ class ScalrClient
         // Build query arguments list
         $params = array(
             'Action' => $action,
-            'KeyID' => SCALR_API_KEY,
-            'Version' => API_VERSION,
+            'KeyID' => $this->api_key,
+            'Version' => $this->api_version,
             'Timestamp' => date("c")
         );
 
@@ -73,7 +82,7 @@ class ScalrClient
         $query = http_build_query($params);
 
         // Execute query
-        $reply = file_get_contents(API_URL."?{$query}");
+        $reply = file_get_contents($this->url."?{$query}");
         return ArrayToXML::toArray($reply);
     }
 }
