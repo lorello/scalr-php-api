@@ -76,7 +76,7 @@ class ScalrClient
             $string_to_sign .= "{$k}{$v}";
 
         // Generate signature
-        $params['Signature'] = base64_encode(hash_hmac('SHA256', $string_to_sign, SCALR_SECRET_KEY, 1));
+        $params['Signature'] = base64_encode(hash_hmac('SHA256', $string_to_sign, $this->secret_key, 1));
 
         // Build query
         $query = http_build_query($params);
